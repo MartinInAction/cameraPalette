@@ -85,7 +85,7 @@ export default class App extends React.PureComponent<{}> {
     if (!this.cameraRef) {
       return;
     }
-    const options = {quality: 0.3, mirrorImage: false};
+    const options = {quality: 0.8, mirrorImage: false};
     this.cameraRef
       .takePictureAsync(options)
       .then((data) => {
