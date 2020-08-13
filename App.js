@@ -8,107 +8,156 @@
 
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
+  Pressable,
+  Image,
+  Dimensions,
 } from 'react-native';
+import {RNCamera} from 'react-native-camera';
+import ImageColors from 'react-native-image-colors';
+var colorSort = require('color-sorter');
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+export default class App extends React.PureComponent<{}> {
+  state = {
+    imageSource: undefined,
+    palette: [],
+  };
+  render = () => {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
+      </View>
+    );
+  };
+
+  renderPreview = () => {
+    return (
+      <View style={styles.previewContainer}>
+        <Image
+          style={styles.previewImage}
+          source={{uri: this.state.imageSource}}
+        />
+        {this.renderPalette()}
+      </View>
+    );
+  };
+
+  renderCamera = () => {
+    return (
+      <RNCamera
+        captureAudio={false}
+        skipProcessing
+        ref={this.setRef}
+        aspect="fill"
+        captureTarget="temp"
+        orientation="portrait"
+        ratio="1:1"
+        notAuthorizedView={<View />}
+        pendingAuthorizationView={undefined}
+        style={styles.camera}
+        type={RNCamera.Constants.Type.back}>
+        <Pressable onPress={this.testImageFromURL} style={styles.cameraButton}>
+          <View style={styles.outerCameraButton}>
+            <View style={styles.innerCameraButton} />
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+        </Pressable>
+      </RNCamera>
+    );
+  };
+
+  generateColorsFromImage = () => {};
+
+  testImageFromURL = () => {
+    let URI = 'https://wallpaperaccess.com/full/2099545.jpg';
+    this.setState({
+      imageSource: URI,
+    });
+    return this.getPalette(URI).then((res) => {
+      let {background, primary, secondary, detail} = res;
+      let colors = [background, primary, secondary, detail];
+      let sortedColors = colors.sort(colorSort.sortFn);
+      this.setState({palette: sortedColors});
+    });
+  };
+
+  getPalette = (uri: string, config?: Object) => {
+    this.setState({imageSource: uri});
+    return ImageColors.getColors(uri, config);
+  };
+
+  renderPalette = () => {
+    return (
+      <View style={styles.paletteContainer}>
+        {this.state.palette.map((color: string, index: number) => {
+          return (
+            <View
+              style={[styles.paletteItem, {backgroundColor: color}]}
+              key={index}
+            />
+          );
+        })}
+      </View>
+    );
+  };
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    flex: 1,
   },
-  engine: {
+  camera: {
+    flex: 1,
+  },
+  paletteItem: {
+    margin: 20,
+    height: 100,
+    width: 100,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  cameraButton: {
     position: 'absolute',
-    right: 0,
+    alignItems: 'center',
+    alignSelf: 'center',
+    bottom: 20,
   },
-  body: {
-    backgroundColor: Colors.white,
+  outerCameraButton: {
+    borderRadius: 150 / 2,
+    borderWidth: 5,
+    borderColor: '#fff',
+    height: 65,
+    width: 65,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  innerCameraButton: {
+    borderRadius: 150 / 2,
+    height: 50,
+    width: 50,
+    backgroundColor: '#fff',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  previewContainer: {
+    flex: 1,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  paletteContainer: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    flex: 1,
+    justifyContent: 'center',
   },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  previewImage: {
+    flex: 1,
+    backgroundColor: '#000',
+    resizeMode: 'contain',
+    height: windowHeight,
+    width: windowWidth,
   },
 });
-
-export default App;

@@ -1375,6 +1375,10 @@ acorn@^7.1.1, acorn@^7.3.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
   integrity sha512-+G7P8jJmCHr+S+cLfQxygbWhXy+8YTVGzAkpEbcLo2mLoL7tij/VG41QSHACSf5QgYRhMZYHuNc6drJaO0Da+w==
 
+add@^2.0.6:
+  version "2.0.6"
+  integrity sha1-JI8Kn25aUo7yKV2+7DBTITCuIjU=
+
 ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3:
   version "6.12.3"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.3.tgz#18c5af38a111ddeb4f2697bd78d68abc1cabd706"
@@ -2050,6 +2054,13 @@ color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+color-sorter@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/color-sorter/-/color-sorter-4.0.1.tgz#09e7dc18cb9a5d2a01a15ae9d1bbd71b39a38f7a"
+  integrity sha512-/0/FJIJ9IuLIxu6dMI5WHZFSdh1AaUzTgbmo8yEDSD+vs/Spof1sB+BZ08lyS1UDsUc29V2w8p9rKW+r8RIY1A==
+  dependencies:
+    tinycolor2 "^1.4.1"
 
 color-support@^1.1.3:
   version "1.1.3"
@@ -5502,6 +5513,18 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-camera@^3.36.0:
+  version "3.36.0"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.36.0.tgz#573980154decba57929957733c300d028697f52c"
+  integrity sha512-TdpT4q9gG4waDsnpKliFpmRnUMuBd3sHBlLBTlIFPPnxayVA9Z2E1yHuR10TCnuGI5a0i0wyCeLFOPJbMg70IQ==
+  dependencies:
+    prop-types "^15.6.2"
+
+react-native-image-colors@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-colors/-/react-native-image-colors-1.2.2.tgz#4e8699d528f58eac6ec47dc78b60a2aa6775e44b"
+  integrity sha512-HN6N+Gc7jn36K4NxUA41HkizqbKwn4VGOBYQLgB/64lGL3Ga4vSLO8XTJmDKH3ez2IzO1iQd8Ro3XeJTGhbdew==
+
 react-native@0.63.2:
   version "0.63.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.2.tgz#eaebf3430577b37fbd66ef228a86b3408259ef8e"
@@ -6441,6 +6464,11 @@ time-stamp@^1.0.0:
   resolved "https://registry.yarnpkg.com/time-stamp/-/time-stamp-1.1.0.tgz#764a5a11af50561921b133f3b44e618687e0f5c3"
   integrity sha1-dkpaEa9QVhkhsTPztE5hhofg9cM=
 
+tinycolor2@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.1.tgz#f4fad333447bc0b07d4dc8e9209d8f39a8ac77e8"
+  integrity sha1-9PrTM0R7wLB9TcjpIJ2POaisd+g=
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
@@ -7007,3 +7035,8 @@ yargs@^15.1.0, yargs@^15.3.1:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
+
+yarn@^1.22.4:
+  version "1.22.4"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.4.tgz#01c1197ca5b27f21edc8bc472cd4c8ce0e5a470e"
+  integrity sha512-oYM7hi/lIWm9bCoDMEWgffW8aiNZXCWeZ1/tGy0DWrN6vmzjCXIKu2Y21o8DYVBUtiktwKcNoxyGl/2iKLUNGA==
