@@ -26,6 +26,8 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default class App extends React.PureComponent<{}> {
+  cameraRef: ?Object;
+
   state = {
     imageSource: undefined,
     palette: [],
@@ -68,7 +70,9 @@ export default class App extends React.PureComponent<{}> {
         pendingAuthorizationView={undefined}
         style={styles.camera}
         type={RNCamera.Constants.Type.back}>
-        <Pressable onPress={this.testImageFromURL} style={styles.cameraButton}>
+        <Pressable
+          onPress={this.generateColorsFromImage}
+          style={styles.cameraButton}>
           <View style={styles.outerCameraButton}>
             <View style={styles.innerCameraButton} />
           </View>
@@ -77,7 +81,24 @@ export default class App extends React.PureComponent<{}> {
     );
   };
 
-  generateColorsFromImage = () => {};
+  generateColorsFromImage = () => {
+    if (!this.cameraRef) {
+      return;
+    }
+    const options = {quality: 0.3, mirrorImage: false};
+    this.cameraRef
+      .takePictureAsync(options)
+      .then((data) => {
+        this.setState({imageSource: data.uri});
+        return this.getPalette(data.uri).then((res) => {
+          let {background, primary, secondary, detail} = res;
+          let colors = [background, primary, secondary, detail];
+          let sortedColors = colors.sort(colorSort.sortFn).reverse();
+          this.setState({palette: sortedColors});
+        });
+      })
+      .catch(() => {});
+  };
 
   testImageFromURL = () => {
     let URI = 'http://donapr.com/wp-content/uploads/2016/03/RRUe0Mo.png';
@@ -119,6 +140,8 @@ export default class App extends React.PureComponent<{}> {
   reset = () => {
     this.setState({imageSource: undefined});
   };
+
+  setRef = (cam: *) => (this.cameraRef = cam);
 }
 
 const styles = StyleSheet.create({
