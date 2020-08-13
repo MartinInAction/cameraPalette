@@ -12,6 +12,7 @@
   "dependencies": {
     "add": "^2.0.6",
     "color-sorter": "^4.0.1",
+    "hex-to-rgba": "^2.0.1",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-camera": "^3.36.0",

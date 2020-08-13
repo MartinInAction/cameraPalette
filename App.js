@@ -18,7 +18,9 @@ import {
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import ImageColors from 'react-native-image-colors';
-var colorSort = require('color-sorter');
+
+import colorSort from 'color-sorter';
+import hexToRgba from 'hex-to-rgba';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -33,6 +35,9 @@ export default class App extends React.PureComponent<{}> {
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
+        <Pressable style={styles.xButton} onPress={this.reset}>
+          <Text style={styles.xButtonText}>X</Text>
+        </Pressable>
       </View>
     );
   };
@@ -75,14 +80,14 @@ export default class App extends React.PureComponent<{}> {
   generateColorsFromImage = () => {};
 
   testImageFromURL = () => {
-    let URI = 'https://wallpaperaccess.com/full/2099545.jpg';
+    let URI = 'http://donapr.com/wp-content/uploads/2016/03/RRUe0Mo.png';
     this.setState({
       imageSource: URI,
     });
     return this.getPalette(URI).then((res) => {
       let {background, primary, secondary, detail} = res;
       let colors = [background, primary, secondary, detail];
-      let sortedColors = colors.sort(colorSort.sortFn);
+      let sortedColors = colors.sort(colorSort.sortFn).reverse();
       this.setState({palette: sortedColors});
     });
   };
@@ -99,12 +104,20 @@ export default class App extends React.PureComponent<{}> {
           return (
             <View
               style={[styles.paletteItem, {backgroundColor: color}]}
-              key={index}
-            />
+              key={index}>
+              <View style={styles.colorTextContainer}>
+                <Text style={styles.colorText}>{color}</Text>
+                <Text style={styles.colorText}>{hexToRgba(color)}</Text>
+              </View>
+            </View>
           );
         })}
       </View>
     );
+  };
+
+  reset = () => {
+    this.setState({imageSource: undefined});
   };
 }
 
@@ -115,13 +128,7 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  paletteItem: {
-    margin: 20,
-    height: 100,
-    width: 100,
-    borderWidth: 2,
-    borderColor: '#fff',
-  },
+
   cameraButton: {
     position: 'absolute',
     alignItems: 'center',
@@ -151,7 +158,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'transparent',
     flex: 1,
+    top: 0,
+    left: 0,
+    bottom: 0,
     justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
   },
   previewImage: {
     flex: 1,
@@ -159,5 +171,36 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: windowHeight,
     width: windowWidth,
+  },
+  paletteItem: {
+    margin: 20,
+    height: 100,
+    width: 100,
+    borderWidth: 2,
+    borderColor: '#fff',
+    justifyContent: 'flex-end',
+  },
+  colorTextContainer: {
+    width: 120,
+    left: -10,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    backgroundColor: '#000',
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  colorText: {
+    color: '#fff',
+    fontSize: 10,
+  },
+  xButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  xButtonText: {
+    color: '#fff',
   },
 });
