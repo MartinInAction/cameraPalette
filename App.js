@@ -37,7 +37,7 @@ export default class App extends React.PureComponent<{}> {
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
-        <Pressable style={styles.xButton} onPress={this.reset}>
+        <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
           <Text style={styles.xButtonText}>X</Text>
         </Pressable>
       </View>
@@ -113,7 +113,7 @@ export default class App extends React.PureComponent<{}> {
     });
   };
 
-  getPalette = (uri: string, config?: Object) => {
+  getPalette = (uri: string, config?: Object = {quality: 'high'}) => {
     this.setState({imageSource: uri});
     return ImageColors.getColors(uri, config);
   };
@@ -220,8 +220,8 @@ const styles = StyleSheet.create({
   },
   xButton: {
     position: 'absolute',
-    top: 20,
-    right: 20,
+    top: 50,
+    right: 25,
   },
   xButtonText: {
     color: '#fff',
