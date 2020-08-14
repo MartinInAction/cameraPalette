@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {StyleSheet, Share, Image, Pressable} from 'react-native';
-import {APP_NAME} from '../libs/Consts';
+// import {APP_NAME} from '../libs/Consts';
 type Props = {
   palette: Object,
 };
@@ -18,10 +18,11 @@ export default class ShareButton extends React.PureComponent<Props, {}> {
   }
 
   share = async () => {
+    console.warn(this.formatMessage());
     try {
       const result = await Share.share({
         message: this.formatMessage(),
-        url: this.props.shareImage,
+        url: '',
       });
 
       if (result.action === Share.sharedAction) {
@@ -42,6 +43,7 @@ export default class ShareButton extends React.PureComponent<Props, {}> {
     let {palette} = this.props;
     return palette
       .map((item) => item.name + ': ' + item.color + '\n')
+      .toString()
       .replace(/,/g, '');
   };
 }
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
     top: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    right: 60,
+    right: 20,
   },
   shareIcon: {
     height: 20,

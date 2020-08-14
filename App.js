@@ -39,15 +39,7 @@ export default class App extends React.PureComponent<{}> {
         <StatusBar barStyle="light-content" />
         {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
         {this.state.imageSource ? (
-          <>
-            <ShareButton palette={this.state.palette} />
-            <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
-              <Image
-                style={styles.xButtonImage}
-                source={require('./assets/images/redoButton.png')}
-              />
-            </Pressable>
-          </>
+          <ShareButton palette={this.state.palette} />
         ) : (
           <View />
         )}
@@ -63,6 +55,12 @@ export default class App extends React.PureComponent<{}> {
           source={{uri: this.state.imageSource}}
         />
         {this.renderPalette()}
+        <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
+          <Image
+            style={styles.xButtonImage}
+            source={require('./assets/images/redoButton.png')}
+          />
+        </Pressable>
       </View>
     );
   };
@@ -81,17 +79,23 @@ export default class App extends React.PureComponent<{}> {
         pendingAuthorizationView={undefined}
         style={styles.camera}
         type={RNCamera.Constants.Type.back}>
-        <Pressable onPress={this.testImageFromURL} style={styles.cameraButton}>
-          <View style={styles.outerCameraButton}>
-            <Animated.View
-              style={[
-                styles.innerCameraButton,
-                {transform: [{scale: this.state.cameraButtonScale}]},
-              ]}
-            />
-          </View>
-        </Pressable>
+        {this.renderCameraButton()}
       </RNCamera>
+    );
+  };
+
+  renderCameraButton = () => {
+    return (
+      <Pressable onPress={this.testImageFromURL} style={styles.cameraButton}>
+        <View style={styles.outerCameraButton}>
+          <Animated.View
+            style={[
+              styles.innerCameraButton,
+              {transform: [{scale: this.state.cameraButtonScale}]},
+            ]}
+          />
+        </View>
+      </Pressable>
     );
   };
 
@@ -99,15 +103,12 @@ export default class App extends React.PureComponent<{}> {
     if (!this.cameraRef) {
       return;
     }
-    const options = {quality: 0.8, mirrorImage: false};
+    const options = {quality: 1, mirrorImage: false};
     this.cameraRef
       .takePictureAsync(options)
       .then((data) => {
         this.setState({imageSource: data.uri});
-        return Palette.getAllSwatchesFromUrl(data.uri).then((palette) => {
-          // let sortedColors = colors.sort(colorSort.sortFn).reverse();
-          this.setState({palette});
-        });
+        return this.getPalette(data.uri);
       })
       .catch(() => {});
   };
@@ -117,8 +118,11 @@ export default class App extends React.PureComponent<{}> {
     this.setState({
       imageSource: URI,
     });
-    Palette.getAllSwatchesFromUrl(URI).then((palette) => {
-      // let sortedColors = colors.sort(colorSort.sortFn).reverse();
+    return this.getPalette(URI);
+  };
+
+  getPalette = (uri: string) => {
+    return Palette.getAllSwatchesFromUrl(uri).then((palette) => {
       this.setState({palette});
     });
   };
@@ -226,15 +230,13 @@ const styles = StyleSheet.create({
   },
   xButton: {
     position: 'absolute',
-    top: 50,
     alignItems: 'center',
-    justifyContent: 'center',
-    right: 15,
+    alignSelf: 'center',
+    bottom: 20,
   },
   xButtonImage: {
-    height: 20,
-    width: 20,
-    alignSelf: 'center',
+    height: 60,
+    width: 60,
   },
   colorName: {
     fontSize: 11,
