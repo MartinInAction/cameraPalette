@@ -16,7 +16,7 @@
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-camera": "^3.36.0",
-    "react-native-image-colors": "^1.2.2",
+    "react-native-palette-full": "^1.1.1",
     "yarn": "^1.22.4"
   },
   "devDependencies": {

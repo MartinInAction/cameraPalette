@@ -18,9 +18,10 @@ import {
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import ImageColors from 'react-native-image-colors';
-
+import Palette from 'react-native-palette-full';
 import colorSort from 'color-sorter';
 import hexToRgba from 'hex-to-rgba';
+import PaletteItem from './components/PaletteItem';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -90,11 +91,9 @@ export default class App extends React.PureComponent<{}> {
       .takePictureAsync(options)
       .then((data) => {
         this.setState({imageSource: data.uri});
-        return this.getPalette(data.uri).then((res) => {
-          let {background, primary, secondary, detail} = res;
-          let colors = [background, primary, secondary, detail];
-          let sortedColors = colors.sort(colorSort.sortFn).reverse();
-          this.setState({palette: sortedColors});
+        return Palette.getAllSwatchesFromUrl(data.uri).then((palette) => {
+          // let sortedColors = colors.sort(colorSort.sortFn).reverse();
+          this.setState({palette});
         });
       })
       .catch(() => {});
@@ -105,34 +104,18 @@ export default class App extends React.PureComponent<{}> {
     this.setState({
       imageSource: URI,
     });
-    return this.getPalette(URI).then((res) => {
-      let {background, primary, secondary, detail} = res;
-      let colors = [background, primary, secondary, detail];
-      let sortedColors = colors.sort(colorSort.sortFn).reverse();
-      this.setState({palette: sortedColors});
+    Palette.getAllSwatchesFromUrl(URI).then((palette) => {
+      // let sortedColors = colors.sort(colorSort.sortFn).reverse();
+      this.setState({palette});
     });
-  };
-
-  getPalette = (uri: string, config?: Object = {quality: 'high'}) => {
-    this.setState({imageSource: uri});
-    return ImageColors.getColors(uri, config);
   };
 
   renderPalette = () => {
     return (
       <View style={styles.paletteContainer}>
-        {this.state.palette.map((color: string, index: number) => {
-          return (
-            <View
-              style={[styles.paletteItem, {backgroundColor: color}]}
-              key={index}>
-              <View style={styles.colorTextContainer}>
-                <Text style={styles.colorText}>{color}</Text>
-                <Text style={styles.colorText}>{hexToRgba(color)}</Text>
-              </View>
-            </View>
-          );
-        })}
+        {this.state.palette.map((paletteItem: Object, index: number) => (
+          <PaletteItem paletteItem={paletteItem} key={index} />
+        ))}
       </View>
     );
   };
@@ -151,7 +134,6 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-
   cameraButton: {
     position: 'absolute',
     alignItems: 'center',
@@ -196,8 +178,9 @@ const styles = StyleSheet.create({
     width: windowWidth,
   },
   paletteItem: {
-    margin: 20,
-    height: 100,
+    margin: 10,
+    marginLeft: 20,
+    height: 80,
     width: 100,
     borderWidth: 2,
     borderColor: '#fff',
@@ -224,6 +207,11 @@ const styles = StyleSheet.create({
     right: 25,
   },
   xButtonText: {
+    color: '#fff',
+  },
+  colorName: {
+    fontSize: 11,
+    fontWeight: '800',
     color: '#fff',
   },
 });
