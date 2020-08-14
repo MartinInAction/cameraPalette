@@ -17,7 +17,6 @@ import {
   Dimensions,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import ImageColors from 'react-native-image-colors';
 import Palette from 'react-native-palette-full';
 import colorSort from 'color-sorter';
 import hexToRgba from 'hex-to-rgba';
