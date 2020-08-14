@@ -37,18 +37,41 @@ export default class PaletteItem extends React.PureComponent<{}> {
     let {paletteItem} = this.props;
     return (
       <Pressable
-        style={[styles.paletteItem, {backgroundColor: paletteItem.color}]}
+        style={[
+          styles.paletteItem,
+          {
+            ...this.getBorderRadius(),
+            height: this.getHeight(),
+            backgroundColor: paletteItem.color,
+          },
+        ]}
         onPress={this.toggleColorFormat}>
-        <View style={styles.colorTextContainer}>
+        {/* <View style={styles.colorTextContainer}>
           <Text style={styles.colorName}>{paletteItem.name}</Text>
-          <Text style={styles.colorText}>
+          {/*<Text style={styles.colorText}>
             {this.state.showHex
               ? paletteItem.color
-              : hexToRgba(paletteItem.color)}
-          </Text>
-        </View>
+            : hexToRgba(paletteItem.color)
+          </Text>}
+        </View>*/}
       </Pressable>
     );
+  };
+
+  getBorderRadius = () => {
+    let {palette, index} = this.props;
+    if (index === 0) {
+      return {borderTopLeftRadius: 50, borderTopRightRadius: 50};
+    }
+    if (palette.length - 1 === index) {
+      return {borderBottomLeftRadius: 50, borderBottomRightRadius: 50};
+    }
+  };
+
+  getHeight = () => {
+    let {paletteItem} = this.props;
+    let val = 600 * paletteItem.percentage;
+    return val > 40 ? val : 40;
   };
 
   toggleColorFormat = () => this.setState({showHex: !this.state.showHex});
@@ -56,12 +79,9 @@ export default class PaletteItem extends React.PureComponent<{}> {
 
 const styles = StyleSheet.create({
   paletteItem: {
-    margin: 10,
     marginLeft: 20,
-    height: 80,
-    width: 100,
-    borderWidth: 2,
-    borderColor: '#fff',
+    height: 50,
+    width: 50,
     justifyContent: 'flex-end',
   },
   colorTextContainer: {

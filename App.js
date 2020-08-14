@@ -143,15 +143,44 @@ export default class App extends React.PureComponent<{}> {
 
   getPalette = (uri: string) => {
     return Palette.getAllSwatchesFromUrl(uri).then((palette) => {
+      palette = this.uniqueArray(palette, (x) => x.color);
+      palette = palette.sort((a, b) => b.percentage - a.percentage);
+      console.log(palette);
       this.setState({palette});
     });
+  };
+
+  uniqueArray = (array, keyFn): Array<Object> => {
+    let mySet = new Set();
+    if (!array) {
+      return [];
+    }
+    return array
+      .reverse()
+      .filter((x) => {
+        let key = keyFn(x);
+        if (!key) {
+          return false;
+        }
+        let isNew = !mySet.has(key);
+        if (isNew) {
+          mySet.add(key);
+        }
+        return isNew;
+      })
+      .reverse();
   };
 
   renderPalette = () => {
     return (
       <View style={styles.paletteContainer}>
         {this.state.palette.map((paletteItem: Object, index: number) => (
-          <PaletteItem paletteItem={paletteItem} key={index} />
+          <PaletteItem
+            palette={this.state.palette}
+            paletteItem={paletteItem}
+            index={index}
+            key={index}
+          />
         ))}
       </View>
     );
@@ -209,6 +238,7 @@ const styles = StyleSheet.create({
   paletteContainer: {
     position: 'absolute',
     backgroundColor: 'transparent',
+    borderRadius: 20,
     flex: 1,
     top: 0,
     left: 0,
