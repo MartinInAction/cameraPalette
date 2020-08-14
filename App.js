@@ -19,6 +19,7 @@ import {
 import {RNCamera} from 'react-native-camera';
 import Palette from 'react-native-palette-full';
 import PaletteItem from './components/PaletteItem';
+import ShareButton from './components/ShareButton';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -31,18 +32,22 @@ export default class App extends React.PureComponent<{}> {
     palette: [],
     cameraButtonScale: new Animated.Value(1),
   };
+
   render = () => {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
         {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
         {this.state.imageSource ? (
-          <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
-            <Image
-              style={styles.xButtonImage}
-              source={require('./assets/images/redoButton.png')}
-            />
-          </Pressable>
+          <>
+            <ShareButton shareImage={this.state.imageSource} />
+            <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
+              <Image
+                style={styles.xButtonImage}
+                source={require('./assets/images/redoButton.png')}
+              />
+            </Pressable>
+          </>
         ) : (
           <View />
         )}
