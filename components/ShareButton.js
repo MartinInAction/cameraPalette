@@ -1,7 +1,11 @@
+// @flow
 import React from 'react';
 import {StyleSheet, Share, Image, Pressable} from 'react-native';
-
-export default class ShareButton extends React.PureComponent<{}, {}> {
+import {APP_NAME} from '../libs/Consts';
+type Props = {
+  palette: Object,
+};
+export default class ShareButton extends React.PureComponent<Props, {}> {
   render() {
     return (
       <Pressable style={styles.shareButton} hitSlop={20} onPress={this.share}>
@@ -13,10 +17,10 @@ export default class ShareButton extends React.PureComponent<{}, {}> {
     );
   }
 
-  share = async (url) => {
+  share = async () => {
     try {
       const result = await Share.share({
-        message: 'Camera Palette 🎨',
+        message: this.formatMessage(),
         url: this.props.shareImage,
       });
 
@@ -32,6 +36,13 @@ export default class ShareButton extends React.PureComponent<{}, {}> {
     } catch (error) {
       console.warn(error.message);
     }
+  };
+
+  formatMessage = () => {
+    let {palette} = this.props;
+    return palette
+      .map((item) => item.name + ': ' + item.color + '\n')
+      .replace(/,/g, '');
   };
 }
 

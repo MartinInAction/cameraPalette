@@ -40,7 +40,7 @@ export default class App extends React.PureComponent<{}> {
         {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
         {this.state.imageSource ? (
           <>
-            <ShareButton shareImage={this.state.imageSource} />
+            <ShareButton palette={this.state.palette} />
             <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
               <Image
                 style={styles.xButtonImage}
@@ -81,9 +81,7 @@ export default class App extends React.PureComponent<{}> {
         pendingAuthorizationView={undefined}
         style={styles.camera}
         type={RNCamera.Constants.Type.back}>
-        <Pressable
-          onPress={this.generateColorsFromImage}
-          style={styles.cameraButton}>
+        <Pressable onPress={this.testImageFromURL} style={styles.cameraButton}>
           <View style={styles.outerCameraButton}>
             <Animated.View
               style={[
