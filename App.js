@@ -23,26 +23,24 @@ import ShareButton from './components/ShareButton';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
+let CAPTURE_INTERVAL;
 export default class App extends React.PureComponent<{}> {
   cameraRef: ?Object;
 
   state = {
     imageSource: undefined,
     palette: [],
+    liveModeActive: false,
     cameraButtonScale: new Animated.Value(1),
   };
 
   render = () => {
+    let showPreview = this.state.imageSource && !this.state.liveModeActive;
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
-        {this.state.imageSource ? (
-          <ShareButton palette={this.state.palette} />
-        ) : (
-          <View />
-        )}
+        {showPreview ? this.renderPreview() : this.renderCamera()}
+        {showPreview ? <ShareButton palette={this.state.palette} /> : <View />}
       </View>
     );
   };
@@ -70,23 +68,30 @@ export default class App extends React.PureComponent<{}> {
       <RNCamera
         captureAudio={false}
         skipProcessing
+        playSoundOnCapture={false}
         ref={this.setRef}
         aspect="fill"
         captureTarget="temp"
         orientation="portrait"
         ratio="1:1"
+        camera2api={true}
         notAuthorizedView={<View />}
         pendingAuthorizationView={undefined}
         style={styles.camera}
         type={RNCamera.Constants.Type.back}>
         {this.renderCameraButton()}
+        {this.state.liveModeActive ? this.renderPalette() : <View />}
       </RNCamera>
     );
   };
 
   renderCameraButton = () => {
+    // onLongPress={this.startLiveMode}
     return (
-      <Pressable onPress={this.testImageFromURL} style={styles.cameraButton}>
+      <Pressable
+        onPressOut={this.disableLiveMode}
+        onPress={this.takePhotoAndGetPalette}
+        style={styles.cameraButton}>
         <View style={styles.outerCameraButton}>
           <Animated.View
             style={[
@@ -99,18 +104,33 @@ export default class App extends React.PureComponent<{}> {
     );
   };
 
-  generateColorsFromImage = () => {
+  takePhotoAndGetPalette = (shouldSetImageSource?: boolean) => {
     if (!this.cameraRef) {
       return;
     }
-    const options = {quality: 1, mirrorImage: false};
+    const options = {mute: true, quality: 1, mirrorImage: false};
     this.cameraRef
       .takePictureAsync(options)
       .then((data) => {
-        this.setState({imageSource: data.uri});
+        !shouldSetImageSource
+          ? undefined
+          : this.setState({imageSource: data.uri});
         return this.getPalette(data.uri);
       })
       .catch(() => {});
+  };
+
+  startLiveMode = () => {
+    this.setState({liveModeActive: true});
+    CAPTURE_INTERVAL = setInterval(() => {
+      return this.takePhotoAndGetPalette(false);
+    }, 1000);
+  };
+
+  disableLiveMode = () => {
+    this.setState({liveModeActive: false});
+    clearInterval(CAPTURE_INTERVAL);
+    CAPTURE_INTERVAL = undefined;
   };
 
   testImageFromURL = () => {
@@ -138,7 +158,7 @@ export default class App extends React.PureComponent<{}> {
   };
 
   reset = () => {
-    this.setState({imageSource: undefined});
+    this.setState({palette: [], imageSource: undefined});
   };
 
   scaleCameraButtonIn = () => {

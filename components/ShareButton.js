@@ -18,7 +18,6 @@ export default class ShareButton extends React.PureComponent<Props, {}> {
   }
 
   share = async () => {
-    console.warn(this.formatMessage());
     try {
       const result = await Share.share({
         message: this.formatMessage(),
