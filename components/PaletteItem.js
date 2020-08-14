@@ -5,6 +5,7 @@
  * @format
  * @flow strict-local
  */
+import {getColorName} from '../Consts/ColorNames';
 
 import React from 'react';
 import {
@@ -14,9 +15,7 @@ import {
   StyleSheet,
   View,
   Text,
-  Pressable,
 } from 'react-native';
-import hexToRgba from 'hex-to-rgba';
 if (
   Platform.OS === 'android' &&
   UIManager.setLayoutAnimationEnabledExperimental
@@ -36,25 +35,19 @@ export default class PaletteItem extends React.PureComponent<{}> {
   render = () => {
     let {paletteItem} = this.props;
     return (
-      <Pressable
-        style={[
-          styles.paletteItem,
-          {
-            ...this.getBorderRadius(),
-            height: this.getHeight(),
-            backgroundColor: paletteItem.color,
-          },
-        ]}
-        onPress={this.toggleColorFormat}>
-        {/* <View style={styles.colorTextContainer}>
-          <Text style={styles.colorName}>{paletteItem.name}</Text>
-          {/*<Text style={styles.colorText}>
-            {this.state.showHex
-              ? paletteItem.color
-            : hexToRgba(paletteItem.color)
-          </Text>}
-        </View>*/}
-      </Pressable>
+      <>
+        <View
+          style={[
+            styles.paletteItem,
+            {
+              ...this.getBorderRadius(),
+              height: this.getHeight(),
+              backgroundColor: paletteItem.color,
+            },
+          ]}
+        />
+        {/* <Text style={styles.colorName}>{getColorName(paletteItem.color)}</Text>*/}
+      </>
     );
   };
 
@@ -100,6 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   colorName: {
+    alignSelf: 'flex-end',
     fontSize: 11,
     fontWeight: '800',
     color: '#fff',

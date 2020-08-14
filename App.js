@@ -20,7 +20,6 @@ import {RNCamera} from 'react-native-camera';
 import Palette from 'react-native-palette-full';
 import PaletteItem from './components/PaletteItem';
 import ShareButton from './components/ShareButton';
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 let CAPTURE_INTERVAL;
@@ -90,7 +89,7 @@ export default class App extends React.PureComponent<{}> {
     return (
       <Pressable
         onPressOut={this.disableLiveMode}
-        onPress={this.takePhotoAndGetPalette}
+        onPress={this.testImageFromURL}
         style={styles.cameraButton}>
         <View style={styles.outerCameraButton}>
           <Animated.View
