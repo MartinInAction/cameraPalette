@@ -10,16 +10,14 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   StatusBar,
   Pressable,
   Image,
   Dimensions,
+  Animated,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Palette from 'react-native-palette-full';
-import colorSort from 'color-sorter';
-import hexToRgba from 'hex-to-rgba';
 import PaletteItem from './components/PaletteItem';
 
 const windowWidth = Dimensions.get('window').width;
@@ -31,15 +29,23 @@ export default class App extends React.PureComponent<{}> {
   state = {
     imageSource: undefined,
     palette: [],
+    cameraButtonScale: new Animated.Value(1),
   };
   render = () => {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         {this.state.imageSource ? this.renderPreview() : this.renderCamera()}
-        <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
-          <Text style={styles.xButtonText}>X</Text>
-        </Pressable>
+        {this.state.imageSource ? (
+          <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
+            <Image
+              style={styles.xButtonImage}
+              source={require('./assets/images/redoButton.png')}
+            />
+          </Pressable>
+        ) : (
+          <View />
+        )}
       </View>
     );
   };
@@ -74,7 +80,12 @@ export default class App extends React.PureComponent<{}> {
           onPress={this.generateColorsFromImage}
           style={styles.cameraButton}>
           <View style={styles.outerCameraButton}>
-            <View style={styles.innerCameraButton} />
+            <Animated.View
+              style={[
+                styles.innerCameraButton,
+                {transform: [{scale: this.state.cameraButtonScale}]},
+              ]}
+            />
           </View>
         </Pressable>
       </RNCamera>
@@ -121,6 +132,16 @@ export default class App extends React.PureComponent<{}> {
 
   reset = () => {
     this.setState({imageSource: undefined});
+  };
+
+  scaleCameraButtonIn = () => {
+    let {cameraButtonScale} = this.state;
+    Animated.timing(cameraButtonScale, {toValue: 0.8}).start();
+  };
+
+  scaleCameraButtonOut = () => {
+    let {cameraButtonScale} = this.state;
+    Animated.timing(cameraButtonScale, {toValue: 1}).start();
   };
 
   setRef = (cam: *) => (this.cameraRef = cam);
@@ -203,10 +224,14 @@ const styles = StyleSheet.create({
   xButton: {
     position: 'absolute',
     top: 50,
-    right: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 15,
   },
-  xButtonText: {
-    color: '#fff',
+  xButtonImage: {
+    height: 20,
+    width: 20,
+    alignSelf: 'center',
   },
   colorName: {
     fontSize: 11,

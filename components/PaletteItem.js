@@ -7,12 +7,30 @@
  */
 
 import React from 'react';
-import {StyleSheet, View, Text, Pressable} from 'react-native';
+import {
+  Platform,
+  LayoutAnimation,
+  UIManager,
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+} from 'react-native';
 import hexToRgba from 'hex-to-rgba';
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 export default class PaletteItem extends React.PureComponent<{}> {
   state = {
     showHex: true,
+  };
+
+  componentDidMount = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   };
 
   render = () => {
