@@ -20,6 +20,7 @@ import {RNCamera} from 'react-native-camera';
 import Palette from 'react-native-palette-full';
 import PaletteItem from './components/PaletteItem';
 import ShareButton from './components/ShareButton';
+import getColorNames from './libs/getColorNames';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 let CAPTURE_INTERVAL;
@@ -133,7 +134,8 @@ export default class App extends React.PureComponent<{}> {
   };
 
   testImageFromURL = () => {
-    let URI = 'https://i.pinimg.com/originals/3b/9c/ed/3b9ced311ae23b3aa0ac5ee9819322dc.jpg';
+    let URI =
+      'https://i.pinimg.com/originals/3b/9c/ed/3b9ced311ae23b3aa0ac5ee9819322dc.jpg';
     this.setState({
       imageSource: URI,
     });
@@ -145,7 +147,15 @@ export default class App extends React.PureComponent<{}> {
       palette = this.uniqueArray(palette, (x) => x.color);
       palette = palette.sort((a, b) => b.percentage - a.percentage);
       console.log(palette);
-      this.setState({palette});
+      let colors = palette.map((paletteItem) => paletteItem.color);
+      getColorNames(colors)
+        .then((colorNames) => {
+          return palette.map((paletteItem, index) => ({
+            ...paletteItem,
+            prettyName: colorNames.colors[index].name,
+          }));
+        })
+        .then((res) => this.setState({palette: res}));
     });
   };
 

@@ -41,9 +41,23 @@ export default class ShareButton extends React.PureComponent<Props, {}> {
   formatMessage = () => {
     let {palette} = this.props;
     return palette
-      .map((item) => item.name + ': ' + item.color + '\n')
+      .map((item) => this.camelize(item.prettyName) + ': ' + item.color + '\n')
       .toString()
       .replace(/,/g, '');
+  };
+
+  camelize = (colorName: string) => {
+    return colorName
+      .replace("'", '')
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+        return index === 0 ? word.toLowerCase() : word.toUpperCase();
+      })
+
+      .replace(/\s+/g, '');
+  };
+
+  formatColorName = (colorName: string) => {
+    return colorName.replace(' ', '').replace(' ´', '').replace("'", '');
   };
 }
 

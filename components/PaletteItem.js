@@ -5,7 +5,6 @@
  * @format
  * @flow strict-local
  */
-import {getColorName} from '../Consts/ColorNames';
 
 import React from 'react';
 import {
@@ -15,6 +14,7 @@ import {
   StyleSheet,
   View,
   Text,
+  Pressable,
 } from 'react-native';
 if (
   Platform.OS === 'android' &&
@@ -25,7 +25,7 @@ if (
 
 export default class PaletteItem extends React.PureComponent<{}> {
   state = {
-    showHex: true,
+    showName: false,
   };
 
   componentDidMount = () => {
@@ -35,7 +35,7 @@ export default class PaletteItem extends React.PureComponent<{}> {
   render = () => {
     let {paletteItem} = this.props;
     return (
-      <>
+      <Pressable onPressIn={this.showName} onPressOut={this.hideName}>
         <View
           style={[
             styles.paletteItem,
@@ -44,10 +44,14 @@ export default class PaletteItem extends React.PureComponent<{}> {
               height: this.getHeight(),
               backgroundColor: paletteItem.color,
             },
-          ]}
-        />
-        {/* <Text style={styles.colorName}>{getColorName(paletteItem.color)}</Text>*/}
-      </>
+          ]}>
+          {this.state.showName ? (
+            <Text style={styles.colorName}>{paletteItem.prettyName}</Text>
+          ) : (
+            <View />
+          )}
+        </View>
+      </Pressable>
     );
   };
 
@@ -67,7 +71,9 @@ export default class PaletteItem extends React.PureComponent<{}> {
     return val > 40 ? val : 40;
   };
 
-  toggleColorFormat = () => this.setState({showHex: !this.state.showHex});
+  showName = () => this.setState({showName: true});
+
+  hideName = () => this.setState({showName: false});
 }
 
 const styles = StyleSheet.create({
@@ -75,26 +81,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     height: 50,
     width: 50,
-    justifyContent: 'flex-end',
-  },
-  colorTextContainer: {
-    width: 120,
-    left: -10,
-    height: 50,
-    alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    backgroundColor: '#000',
-    borderWidth: 2,
-    borderColor: '#fff',
-  },
-  colorText: {
-    color: '#fff',
-    fontSize: 10,
   },
   colorName: {
-    alignSelf: 'flex-end',
-    fontSize: 11,
+    width: 200,
+    left: 60,
+    alignSelf: 'center',
+    position: 'absolute',
+    fontSize: 14,
     fontWeight: '800',
     color: '#fff',
   },
