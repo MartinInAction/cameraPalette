@@ -89,7 +89,7 @@ export default class App extends React.PureComponent<{}> {
     return (
       <Pressable
         onPressOut={this.disableLiveMode}
-        onPress={this.takePhotoAndGetPalette}
+        onPress={this.testImageFromURL}
         style={styles.cameraButton}>
         <View style={styles.outerCameraButton}>
           <Animated.View
@@ -133,7 +133,7 @@ export default class App extends React.PureComponent<{}> {
   };
 
   testImageFromURL = () => {
-    let URI = 'http://donapr.com/wp-content/uploads/2016/03/RRUe0Mo.png';
+    let URI = 'https://i.pinimg.com/originals/3b/9c/ed/3b9ced311ae23b3aa0ac5ee9819322dc.jpg';
     this.setState({
       imageSource: URI,
     });
