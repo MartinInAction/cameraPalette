@@ -17,6 +17,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* cameraPaletteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* cameraPaletteTests.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B61363AFF46DDF8F6965A7F9 /* libPods-cameraPalette-cameraPaletteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 374ABD206F6FACD4A007AEB0 /* libPods-cameraPalette-cameraPaletteTests.a */; };
+		C0C8FC0624ED1F58005B91DF /* smile.png in Resources */ = {isa = PBXBuildFile; fileRef = C0C8FC0524ED1F57005B91DF /* smile.png */; };
 		ED744EC87C230DEEFF2DC8F4 /* libPods-cameraPalette-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E329674F57C014BA6045C776 /* libPods-cameraPalette-tvOS.a */; };
 		F60C210008B5F072FA6D60C7 /* libPods-cameraPalette.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 884072B4E1CE708583ABA729 /* libPods-cameraPalette.a */; };
 		FFE3B5C97A990A0EC64B0472 /* libPods-cameraPalette-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5776FE290B10FD591CD4D687 /* libPods-cameraPalette-tvOSTests.a */; };
@@ -61,6 +62,7 @@
 		97E72B5FC7B0018BFC662729 /* Pods-cameraPalette-cameraPaletteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cameraPalette-cameraPaletteTests.release.xcconfig"; path = "Target Support Files/Pods-cameraPalette-cameraPaletteTests/Pods-cameraPalette-cameraPaletteTests.release.xcconfig"; sourceTree = "<group>"; };
 		98F90CBFAA22CF5B8CDC50C4 /* Pods-cameraPalette.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cameraPalette.release.xcconfig"; path = "Target Support Files/Pods-cameraPalette/Pods-cameraPalette.release.xcconfig"; sourceTree = "<group>"; };
 		9FF483F7D99C1C84C23FC1FB /* Pods-cameraPalette-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cameraPalette-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-cameraPalette-tvOSTests/Pods-cameraPalette-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		C0C8FC0524ED1F57005B91DF /* smile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile.png; path = cameraPalette/smile.png; sourceTree = "<group>"; };
 		C4D8EB900C0ABD6570DF1915 /* Pods-cameraPalette.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cameraPalette.debug.xcconfig"; path = "Target Support Files/Pods-cameraPalette/Pods-cameraPalette.debug.xcconfig"; sourceTree = "<group>"; };
 		E329674F57C014BA6045C776 /* libPods-cameraPalette-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cameraPalette-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E60E7360D6682CED4350D73A /* Pods-cameraPalette-cameraPaletteTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cameraPalette-cameraPaletteTests.debug.xcconfig"; path = "Target Support Files/Pods-cameraPalette-cameraPaletteTests/Pods-cameraPalette-cameraPaletteTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				C0C8FC0524ED1F57005B91DF /* smile.png */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -341,6 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				C0C8FC0624ED1F58005B91DF /* smile.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -655,7 +659,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = H4L84BUG9D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = cameraPalette/Info.plist;
@@ -679,7 +683,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = H4L84BUG9D;
 				INFOPLIST_FILE = cameraPalette/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
