@@ -89,7 +89,7 @@ export default class App extends React.PureComponent<{}> {
     return (
       <Pressable
         onPressOut={this.disableLiveMode}
-        onPress={this.testImageFromURL}
+        onPress={this.takePhotoAndGetPalette}
         style={styles.cameraButton}>
         <View style={styles.outerCameraButton}>
           <Animated.View
