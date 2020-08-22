@@ -50,8 +50,8 @@ export default class App extends React.PureComponent<{}> {
       onStartShouldSetPanResponder: (e: Object, gs: Object) => true,
       onPanResponderMove: (e, gs) => {
         this.state.colorPickerPlacement.setValue({
-          x: gs.moveX,
-          y: gs.moveY,
+          x: gs.moveX - 15,
+          y: gs.moveY - 15,
         });
         this.getColorOfPixel(gs.moveX, gs.moveY).then((color) => {
           this.setState({overrideColor: color});
@@ -228,7 +228,7 @@ export default class App extends React.PureComponent<{}> {
             overrideColor={overrideColor}
             isSelected={paletteItem.color === selectedColor}
             setSelectedColor={this.setSelectedColor}
-            palette={this.state.palette}
+            fullPalette={this.state.palette}
             paletteItem={paletteItem}
             index={index}
             key={index}

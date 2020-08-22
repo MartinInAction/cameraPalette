@@ -26,17 +26,30 @@ if (
 type Props = {
   setSelectedColor: (color?: string) => *,
   isSelected: boolean,
+  paletteItem: Object,
+  palette: string,
   overrideColor?: string,
+  fullPalette: Array<Object>,
 };
 
-type State = {};
+type State = {
+  paletteItem: Object,
+};
 export default class PaletteItem extends React.PureComponent<Props, State> {
   componentDidMount = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   };
 
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      paletteItem: props.paletteItem,
+    };
+  }
+
   render = () => {
-    let {paletteItem, overrideColor} = this.props;
+    let {overrideColor} = this.props;
+    let {paletteItem} = this.state;
     return (
       <Pressable onPress={this.toggleColor}>
         <View
@@ -63,11 +76,11 @@ export default class PaletteItem extends React.PureComponent<Props, State> {
   };
 
   getBorderRadius = () => {
-    let {palette, index} = this.props;
+    let {fullPalette, index} = this.props;
     if (index === 0) {
       return {borderTopLeftRadius: 50, borderTopRightRadius: 50};
     }
-    if (palette.length - 1 === index) {
+    if (fullPalette.length - 1 === index) {
       return {borderBottomLeftRadius: 50, borderBottomRightRadius: 50};
     }
   };
@@ -79,8 +92,10 @@ export default class PaletteItem extends React.PureComponent<Props, State> {
   };
 
   toggleColor = () => {
-    let {isSelected, paletteItem, setSelectedColor} = this.props;
+    let {isSelected, paletteItem, setSelectedColor, overrideColor} = this.props;
     if (isSelected) {
+      paletteItem = {...paletteItem, color: overrideColor};
+      this.setState({paletteItem});
       return setSelectedColor(undefined);
     }
     setSelectedColor(paletteItem.color);
