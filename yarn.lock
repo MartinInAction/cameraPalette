@@ -5526,6 +5526,11 @@ react-native-camera@^3.36.0:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-get-pixel-color@^1.1.0-alpha.23:
+  version "1.1.0-alpha.23"
+  resolved "https://registry.yarnpkg.com/react-native-get-pixel-color/-/react-native-get-pixel-color-1.1.0-alpha.23.tgz#beeaa34ed64d0fa75e96fd84bbca5cea2cd873bf"
+  integrity sha512-f1UNKy0oKwu4rYmJmMq/ocO7OIL+O+ZLWec2FZY1SW7lEisSc+EbB6CvoV9aTqiq/WleZTqrDm6YAG+HBYHfGw==
+
 react-native-palette-full@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-palette-full/-/react-native-palette-full-1.1.1.tgz#8c1336acc556d924a8831217323c94cb68456039"

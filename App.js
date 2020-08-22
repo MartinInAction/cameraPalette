@@ -15,24 +15,50 @@ import {
   Image,
   Dimensions,
   Animated,
+  PanResponder,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Palette from 'react-native-palette-full';
 import PaletteItem from './components/PaletteItem';
 import ShareButton from './components/ShareButton';
 import getColorNames from './libs/getColorNames';
+import GetPixelColor from 'react-native-get-pixel-color';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 let CAPTURE_INTERVAL;
 export default class App extends React.PureComponent<{}> {
   cameraRef: ?Object;
+  _panResponder = {};
 
   state = {
     imageSource: undefined,
     palette: [],
     liveModeActive: false,
     cameraButtonScale: new Animated.Value(1),
+    selectedColor: undefined,
+    colorPickerPlacement: new Animated.ValueXY({
+      x: windowWidth / 2 - 20,
+      y: windowHeight - 200,
+    }),
+    overrideColor: undefined,
   };
+
+  constructor(props: Object) {
+    super(props);
+    this._panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (e: Object, gs: Object) => true,
+      onPanResponderMove: (e, gs) => {
+        this.state.colorPickerPlacement.setValue({
+          x: gs.moveX,
+          y: gs.moveY,
+        });
+        this.getColorOfPixel(gs.moveX, gs.moveY).then((color) => {
+          this.setState({overrideColor: color});
+        });
+      },
+    });
+  }
 
   render = () => {
     let showPreview = this.state.imageSource && !this.state.liveModeActive;
@@ -53,6 +79,7 @@ export default class App extends React.PureComponent<{}> {
           source={{uri: this.state.imageSource}}
         />
         {this.renderPalette()}
+        {this.renderColorPicker()}
         <Pressable style={styles.xButton} hitSlop={20} onPress={this.reset}>
           <Image
             style={styles.xButtonImage}
@@ -60,6 +87,15 @@ export default class App extends React.PureComponent<{}> {
           />
         </Pressable>
       </View>
+    );
+  };
+
+  renderColorPicker = () => {
+    return (
+      <Animated.View
+        {...this._panResponder.panHandlers}
+        style={[styles.box, this.state.colorPickerPlacement.getLayout()]}
+      />
     );
   };
 
@@ -90,7 +126,7 @@ export default class App extends React.PureComponent<{}> {
     return (
       <Pressable
         onPressOut={this.disableLiveMode}
-        onPress={this.takePhotoAndGetPalette}
+        onPress={this.testImageFromURL}
         style={styles.cameraButton}>
         <View style={styles.outerCameraButton}>
           <Animated.View
@@ -143,6 +179,9 @@ export default class App extends React.PureComponent<{}> {
   };
 
   getPalette = (uri: string) => {
+    GetPixelColor.setImage(uri).catch((error) => {
+      console.log(error);
+    });
     return Palette.getAllSwatchesFromUrl(uri).then((palette) => {
       palette = this.uniqueArray(palette, (x) => x.color);
       palette = palette.sort((a, b) => b.percentage - a.percentage);
@@ -181,10 +220,14 @@ export default class App extends React.PureComponent<{}> {
   };
 
   renderPalette = () => {
+    let {selectedColor, overrideColor} = this.state;
     return (
       <View style={styles.paletteContainer}>
         {this.state.palette.map((paletteItem: Object, index: number) => (
           <PaletteItem
+            overrideColor={overrideColor}
+            isSelected={paletteItem.color === selectedColor}
+            setSelectedColor={this.setSelectedColor}
             palette={this.state.palette}
             paletteItem={paletteItem}
             index={index}
@@ -195,8 +238,19 @@ export default class App extends React.PureComponent<{}> {
     );
   };
 
+  getColorOfPixel = (x: number, y: number) => {
+    return GetPixelColor.pickColorAt(x, y).catch((error) => {
+      console.log(error);
+    });
+  };
+
+  setSelectedColor = (color?: string) => {
+    this.setState({selectedColor: color});
+  };
+
   reset = () => {
     this.setState({palette: [], imageSource: undefined});
+    this.setSelectedColor(undefined);
   };
 
   scaleCameraButtonIn = () => {
@@ -301,5 +355,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '800',
     color: '#fff',
+  },
+  box: {
+    position: 'absolute',
+    height: 30,
+    backgroundColor: 'white',
+    opacity: 0.4,
+    width: 30,
+    borderRadius: 100 / 2,
   },
 });

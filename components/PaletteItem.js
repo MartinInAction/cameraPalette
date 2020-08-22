@@ -23,29 +23,36 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-export default class PaletteItem extends React.PureComponent<{}> {
-  state = {
-    showName: false,
-  };
+type Props = {
+  setSelectedColor: (color?: string) => *,
+  isSelected: boolean,
+  overrideColor?: string,
+};
 
+type State = {};
+export default class PaletteItem extends React.PureComponent<Props, State> {
   componentDidMount = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   };
 
   render = () => {
-    let {paletteItem} = this.props;
+    let {paletteItem, overrideColor} = this.props;
     return (
-      <Pressable onPressIn={this.showName} onPressOut={this.hideName}>
+      <Pressable onPress={this.toggleColor}>
         <View
           style={[
             styles.paletteItem,
+            this.props.isSelected ? styles.selected : undefined,
             {
               ...this.getBorderRadius(),
               height: this.getHeight(),
-              backgroundColor: paletteItem.color,
+              backgroundColor:
+                this.props.isSelected && overrideColor
+                  ? overrideColor
+                  : paletteItem.color,
             },
           ]}>
-          {this.state.showName ? (
+          {this.props.isSelected ? (
             <Text style={styles.colorName}>{paletteItem.prettyName}</Text>
           ) : (
             <View />
@@ -71,9 +78,13 @@ export default class PaletteItem extends React.PureComponent<{}> {
     return val > 40 ? val : 40;
   };
 
-  showName = () => this.setState({showName: true});
-
-  hideName = () => this.setState({showName: false});
+  toggleColor = () => {
+    let {isSelected, paletteItem, setSelectedColor} = this.props;
+    if (isSelected) {
+      return setSelectedColor(undefined);
+    }
+    setSelectedColor(paletteItem.color);
+  };
 }
 
 const styles = StyleSheet.create({
@@ -91,5 +102,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '800',
     color: '#fff',
+  },
+  selected: {
+    borderWidth: 4,
+    borderColor: 'black',
   },
 });
